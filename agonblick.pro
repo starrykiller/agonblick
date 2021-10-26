@@ -9,18 +9,18 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp \
-    mainwindow.cpp \
-    settings.cpp \
-    student.cpp
+    src\\main.cpp \
+    src\\mainwindow.cpp \
+    src\\settings.cpp \
+    src\\student.cpp
 
 HEADERS += \
-    mainwindow.h \
-    settings.h \
-    student.h
+    src\\mainwindow.h \
+    src\\settings.h \
+    src\\student.h
 
 FORMS += \
-    mainwindow.ui
+    src\\mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -28,4 +28,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    background.qrc
+    resources\\background.qrc
