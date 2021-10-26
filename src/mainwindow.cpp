@@ -40,8 +40,7 @@ void mainWindow::on_random_clicked()
     int sleepMS = QRandomGenerator::global()->bounded(50,100);
     for (int i = 0; i < times; i ++) {
         student st = conf.rander[QRandomGenerator::global()->bounded(0,44)];
-        ui->nameShow->setHtml("<span style='font-family: consolas, 方正小标宋简体, 华文中宋, 微软雅黑; font-weight: 300; font-size: 40pt;'>" +
-                              QString::number(st.getId()) + "=>" + st.getName() + "</span>");
+        ui->nameShow->setHtml(returnHtml(st));
         Sleep(sleepMS);
     }
     ui->random->setDisabled(false);
@@ -52,4 +51,11 @@ void mainWindow::Sleep(int msec)
     QTime dieTime = QTime::currentTime().addMSecs(msec);
     while( QTime::currentTime() < dieTime )
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
+
+QString mainWindow::returnHtml(student st) {
+    QString Id;
+    if (st.getId() < 10) Id = "0" + QString::number(st.getId());
+    else Id = QString::number(st.getId());
+    return startHtml + Id + "]:" + st.getName() + endHtml;
 }

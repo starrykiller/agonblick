@@ -55,7 +55,7 @@ background: rgba(255, 255, 255, 0.35);
    <widget class="QPushButton" name="exit">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>240</x>
       <y>220</y>
       <width>121</width>
       <height>71</height>
@@ -76,7 +76,7 @@ background: rgba(255, 255, 255, 0.35);
       <x>10</x>
       <y>10</y>
       <width>381</width>
-      <height>181</height>
+      <height>131</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -98,7 +98,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="random">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>220</y>
       <width>121</width>
       <height>71</height>
