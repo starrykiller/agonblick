@@ -8,13 +8,18 @@ class student
 {
 public:
     student(QString, unsigned int);
+    student();
     QString getName();
     int getId();
     void setName(QString name);
     void setId(int Id);
+    bool operator ==(student a) {
+        if (a.getName() == this->getName() && a.getId() == this->getId()) return true;
+        return false;
+    }
 
 private:
-    QString name;
+    QString name="untitled";
     int Id = 0;
 };
 

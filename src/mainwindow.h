@@ -25,9 +25,10 @@ private slots:
     void on_random_clicked();
 
 private:
-    const QString startHtml = "<span style='font-family: consolas, 方正小标宋简体, 华文中宋, 微软雅黑; font-weight: 300; font-size: 40pt;'>[";
+    const QString startHtml = "<span style='font-family: consolas, 方正小标宋简体, 华文中宋, 微软雅黑; font-weight: 300; font-size: 40pt;'>";
     const QString endHtml = "</span>";
     Ui::mainWindow *ui;
     settings conf;
+    student last;
 };
 #endif // MAINWINDOW_H

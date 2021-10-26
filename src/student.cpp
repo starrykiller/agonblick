@@ -5,6 +5,10 @@ student::student(QString name, unsigned int Id)
     this->name=name, this->Id=Id;
 }
 
+student::student() {
+
+}
+
 QString student::getName() {
     return this->name;
 }
