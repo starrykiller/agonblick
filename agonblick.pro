@@ -29,3 +29,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resources\\background.qrc
+
+QMAKE_TARGET_PRODUCT = Agonblick
+QMAKE_TARGET_COMPANY = "freestyle studio"
+QMAKE_TARGET_DESCRIPTION = "A program to choose a student randomly."
+QMAKE_TARGET_COPYRIGHT = "starry killer"

@@ -5,6 +5,10 @@
 #include <QCoreApplication>
 #include "student.h"
 #include <QMessageBox>
+#include <QString>
+#include <QGraphicsBlurEffect>
+
+const QString __VER__ = "1.3.0";
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
@@ -18,6 +22,10 @@ mainWindow::mainWindow(QWidget *parent)
         exit(-1);
     }
     ui->nameShow->setHtml(startHtml+"成功读取"+QString::number(conf.num)+"人" +endHtml);
+    setWindowTitle("Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__);
+   // QGraphicsBlurEffect *eff1 = new QGraphicsBlurEffect;
+    //eff1->setBlurRadius(10);
+    //ui->frame->setGraphicsEffect(eff1);
 }
 
 mainWindow::~mainWindow()
@@ -64,5 +72,5 @@ QString mainWindow::returnHtml(student st) {
     QString Id;
     if (st.getId() < 10) Id = "0" + QString::number(st.getId());
     else Id = QString::number(st.getId());
-    return startHtml + "[" + Id + "]:" + st.getName() + endHtml;
+    return startHtml + "[" + Id + "]:<span style=\"color: rgb(0, 75, 255);\"><b>" + st.getName() + "</b></span>" + endHtml;
 }

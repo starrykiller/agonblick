@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Agonblick v1.2.0</string>
+   <string>Agonblick</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources/background.qrc">
@@ -43,7 +43,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">#frame {
-background: rgba(255, 255, 255, 0.35);
+background: rgba(255, 255, 255, 0.3);
 }</string>
    </property>
    <property name="frameShape">
@@ -55,28 +55,73 @@ background: rgba(255, 255, 255, 0.35);
    <widget class="QPushButton" name="exit">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>220</y>
+      <x>270</x>
+      <y>200</y>
       <width>121</width>
       <height>71</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>19</pointsize>
      </font>
     </property>
     <property name="text">
      <string>退出</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="random">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>200</y>
+      <width>121</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <pointsize>19</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>抽取</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="kill">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>130</y>
+      <width>101</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(16, 16, 16, 0.9);
+color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
    <widget class="QTextEdit" name="nameShow">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
+      <y>20</y>
       <width>381</width>
-      <height>131</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -95,54 +140,6 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:40pt; font-weight:300;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="random">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>220</y>
-      <width>121</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>抽取</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="kill">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>150</y>
-      <width>101</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Comic Sans MS</family>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgba(16, 16, 16, 0.9);
-color: rgb(255, 255, 255);</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <zorder>nameShow</zorder>
-   <zorder>random</zorder>
-   <zorder>exit</zorder>
-   <zorder>kill</zorder>
   </widget>
  </widget>
  <resources>

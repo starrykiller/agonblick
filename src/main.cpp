@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     int bg = QRandomGenerator::global()->bounded(1,3);
     QPixmap pixmap;
         if (bg == 1)
-            pixmap = QPixmap(":/bg/1.jpg").scaled(w.size());
+            pixmap = QPixmap(":/bg/1.png").scaled(w.size());
 
         else if (bg == 2)
             pixmap = QPixmap(":/bg/2.png").scaled(w.size());
