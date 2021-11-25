@@ -8,7 +8,7 @@
 #include <QString>
 #include <QGraphicsBlurEffect>
 
-const QString __VER__ = "1.3.0";
+const QString __VER__ = "1.4.1";
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
@@ -21,7 +21,7 @@ mainWindow::mainWindow(QWidget *parent)
         QMessageBox::critical(this, "错误", "(-1) 配置文件无法打开，请检查配置文件是否存在");
         exit(-1);
     }
-    ui->nameShow->setHtml(startHtml+"成功读取"+QString::number(conf.num)+"人" +endHtml);
+    ui->nameShow->setHtml(startHtml+QString::number(conf.num)+";" + QString::number(conf.groupNum) +endHtml);
     setWindowTitle("Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__);
    // QGraphicsBlurEffect *eff1 = new QGraphicsBlurEffect;
     //eff1->setBlurRadius(10);
@@ -44,21 +44,35 @@ void mainWindow::on_exit_clicked()
 void mainWindow::on_random_clicked()
 {
     ui->random->setDisabled(true);
+    ui->randomByGroup->setDisabled(true);
+    ui->kill->setText("");
     // started random
     int times = QRandomGenerator::global()->bounded(7,20);
-    int sleepMS = QRandomGenerator::global()->bounded(50,100);
+    int sleepMS = QRandomGenerator::global()->bounded(50,70);
     student st;
     for (int i = 0; i < times; i ++) {
-        st = conf.rander[QRandomGenerator::global()->bounded(0,int(conf.num - 1))];
+        st = conf.students[QRandomGenerator::global()->bounded(0,int(conf.num))];
         ui->nameShow->setHtml(returnHtml(st));
         Sleep(sleepMS);
     }
-    if (st==last) {
-        ui->kill->setText("Double Kill!");
+
+    if (st.getName().indexOf("陈鸿") != -1 && QRandomGenerator::global()->bounded(0, 5) >= 4) { // 40%
+        ui->nameShow->setHtml(startHtml +  "(" + st.getId() +
+                              ") <span style=\"color: rgb(0, 255, 0);\"><b>" + st.getName() + "</b></span>" + endHtml);
+        ui->kill->setText("#1(");
     }
-    else ui->kill->setText("");
+    if ((st.getId()==5 || st.getId()==4) && QRandomGenerator::global()->bounded(0, 5) >= 5) { // 20%
+        Sleep(2000);
+        int tempNums[6] = {1, 6, 14, 18, 19, 32};
+        st=conf.students[tempNums[QRandomGenerator::global()->bounded(0, 5)]];
+        ui->nameShow->setHtml(returnHtml(st));
+    }
+    if (st==last) {
+        ui->kill->setText("Double Kill! (0.04%)");
+    }
     last=st;
     ui->random->setDisabled(false);
+    ui->randomByGroup->setDisabled(false);
 }
 
 void mainWindow::Sleep(int msec)
@@ -74,3 +88,27 @@ QString mainWindow::returnHtml(student st) {
     else Id = QString::number(st.getId());
     return startHtml + "[" + Id + "]:<span style=\"color: rgb(0, 75, 255);\"><b>" + st.getName() + "</b></span>" + endHtml;
 }
+
+QString mainWindow::returnHtmlByGroup(group gp) {
+    QString Id = QString::number(gp.getId());
+    return startHtml + "[" + Id + "] <span style=\"color: rgb(255, 125, 0);\"><b>" + gp.getLeaderName() + "</b>组</span>" + endHtml;
+}
+
+void mainWindow::on_randomByGroup_clicked()
+{
+    ui->random->setDisabled(true);
+    ui->randomByGroup->setDisabled(true);
+    // TODO: do randoming
+    ui->kill->setText("");
+    // started random
+    int times = QRandomGenerator::global()->bounded(7,20);
+    int sleepMS = QRandomGenerator::global()->bounded(50,70);
+    for (int i = 0; i < times; i ++) {
+        group gp = conf.groups[QRandomGenerator::global()->bounded(0,int(conf.groupNum))];
+        ui->nameShow->setHtml(returnHtmlByGroup(gp));
+        Sleep(sleepMS);
+    }
+    ui->random->setDisabled(false);
+    ui->randomByGroup->setDisabled(false);
+}
+
