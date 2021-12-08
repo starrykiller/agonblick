@@ -8,7 +8,7 @@
 #include <QString>
 #include <QGraphicsBlurEffect>
 
-const QString __VER__ = "1.4.1";
+const QString __VER__ = "1.5.0";
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
@@ -56,17 +56,21 @@ void mainWindow::on_random_clicked()
         Sleep(sleepMS);
     }
 
-    if (st.getName().indexOf("陈鸿") != -1 && QRandomGenerator::global()->bounded(0, 5) >= 4) { // 40%
+    if (st.getName().indexOf("陈鸿") != -1 && QRandomGenerator::global()->bounded(0, 5) >= 3) { // 40%
         ui->nameShow->setHtml(startHtml +  "(" + st.getId() +
-                              ") <span style=\"color: rgb(0, 255, 0);\"><b>" + st.getName() + "</b></span>" + endHtml);
+                              ") <span style=\"color: rgb(0, 255, 0);\"><b>东鸟民</b></span>" + endHtml);
         ui->kill->setText("#1(");
     }
-    if ((st.getId()==5 || st.getId()==4) && QRandomGenerator::global()->bounded(0, 5) >= 5) { // 20%
-        Sleep(2000);
-        int tempNums[6] = {1, 6, 14, 18, 19, 32};
-        st=conf.students[tempNums[QRandomGenerator::global()->bounded(0, 5)]];
-        ui->nameShow->setHtml(returnHtml(st));
+    /*if (last.getId()==5&& QRandomGenerator::global()->bounded(0, 10) > 0) {
+        ui->nameShow->setHtml(returnHtml(conf.students[3]));
+        st=conf.students[3];
+        ui->kill->setText("#4&#5");
     }
+    else if (last.getId()==4&& QRandomGenerator::global()->bounded(0, 10) > 0) {
+        ui->nameShow->setHtml(returnHtml(conf.students[4]));
+        st=conf.students[4];
+        ui->kill->setText("#4&#5");
+    }*/
     if (st==last) {
         ui->kill->setText("Double Kill! (0.04%)");
     }

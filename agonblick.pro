@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/cp.cpp \
     src/group.cpp \
     src\\main.cpp \
     src\\mainwindow.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
     src\\student.cpp
 
 HEADERS += \
+    src/cp.h \
     src/group.h \
     src\\mainwindow.h \
     src\\settings.h \
@@ -33,6 +35,6 @@ RESOURCES += \
     resources\\background.qrc
 
 QMAKE_TARGET_PRODUCT = Agonblick
-QMAKE_TARGET_COMPANY = "freestyle studio"
+QMAKE_TARGET_COMPANY = "starry studio"
 QMAKE_TARGET_DESCRIPTION = "A program to choose a student randomly."
 QMAKE_TARGET_COPYRIGHT = "starry killer"

@@ -7,6 +7,7 @@
 #include <QTime>
 #include <QWidget>
 #include "group.h"
+#include "cp.h"
 
 class settings
 {
@@ -18,6 +19,7 @@ public:
     unsigned int num = 0;
     unsigned int groupNum = 0;
     QWidget* par;
+    QStringList returnListByLine(QString configFileName);
 };
 
 #endif // SETTINGS_H

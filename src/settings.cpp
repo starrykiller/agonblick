@@ -12,44 +12,45 @@ settings::settings()
 
 }
 
+QStringList settings::returnListByLine(QString configFileName) {
+    QFile conf(QCoreApplication::applicationDirPath() + "\\config\\" + configFileName);
+    if (!conf.exists()) {
+        conf.close();
+        return QString("null").split("\n");
+    }
+    conf.open(QIODevice::ReadOnly | QIODevice::Text);
+    conf.close();
+    return QString(conf.readAll()).split("\n");
+}
+
 bool settings::read() {
     // read names
-    QFile f(QCoreApplication::applicationDirPath() + "\\names.ini");
-    if (!f.exists()) {
+    QStringList nameList = returnListByLine("names.ini");
+    if (nameList.at(0) == "null") {
         return false;
     }
-    f.open(QIODevice::ReadOnly | QIODevice::Text);
-    QByteArray t = f.readAll();
-    QString s(t);
-    f.close();
-    QStringList list = s.split("\n");
-    QStringListIterator iter(list);
-    while (iter.hasNext()) {
+    for (const auto& i : nameList) {
         this->num++;
-        student st(iter.next(), this->num);
+        student st(i, this->num);
         students.append(st);
         qDebug() << st.getName() << " " << st.getId();
     }
+
     if (this->num == 1 && students[0].getName() == "") return false;
     qDebug() << "Name Total: " << this->num;
 
-    QFile f1(QCoreApplication::applicationDirPath() + "\\groups.ini");
-    if (!f1.exists()) {
+    // read groups
+    QStringList groupList = returnListByLine("groups.ini");
+    if (groupList.at(0) == "null") {
         return false;
     }
-    f1.open(QIODevice::ReadOnly | QIODevice::Text);
-    QByteArray t1 = f1.readAll();
-    QString s1(t1);
-    f1.close();
-    QStringList list1 = s1.split("\n");
-    QStringListIterator iter1(list1);
-    while (iter1.hasNext()) {
+    for (const auto& i : groupList) {
         this->groupNum++;
-        group gp(iter1.next(), this->groupNum);
+        group gp(i, this->groupNum);
         groups.append(gp);
         qDebug() << gp.getLeaderName() << " " << gp.getId();
     }
     if (this->groupNum == 1 && groups[0].getLeaderName() == "") return false;
-    qDebug() << "Total: " << this->num;
+    qDebug() << "Group Total: " << this->num;
     return true;
 }
