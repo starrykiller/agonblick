@@ -14,13 +14,14 @@ settings::settings()
 
 QStringList settings::returnListByLine(QString configFileName) {
     QFile conf(QCoreApplication::applicationDirPath() + "\\config\\" + configFileName);
+    conf.open(QIODevice::ReadOnly | QIODevice::Text);
     if (!conf.exists()) {
         conf.close();
         return QString("null").split("\n");
     }
-    conf.open(QIODevice::ReadOnly | QIODevice::Text);
+    QStringList l = QString(conf.readAll()).split("\n");
     conf.close();
-    return QString(conf.readAll()).split("\n");
+    return l;
 }
 
 bool settings::read() {

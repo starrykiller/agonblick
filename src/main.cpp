@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-
+#include <QIcon>
 #include <QApplication>
 #include <QRandomGenerator>
 #include <QPalette>
@@ -8,6 +8,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setWindowIcon(QIcon(":/icon/icon.ico"));
     mainWindow w;
     int bg = QRandomGenerator::global()->bounded(1,3);
     QPixmap pixmap;

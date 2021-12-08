@@ -34,6 +34,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     resources\\background.qrc
 
+RC_FILE = icon.rc
+
 QMAKE_TARGET_PRODUCT = Agonblick
 QMAKE_TARGET_COMPANY = "starry studio"
 QMAKE_TARGET_DESCRIPTION = "A program to choose a student randomly."
