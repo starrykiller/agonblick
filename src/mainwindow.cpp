@@ -8,16 +8,34 @@
 #include <QString>
 #include <QGraphicsBlurEffect>
 #include <QMouseEvent>
+#include <QBitmap>
+#include <QPainter>
 
-const QString __VER__ = "1.6.1";
+const QString __VER__ = "2.0.0";
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::mainWindow)
 {
     ui->setupUi(this);
-    ui->kill->installEventFilter(this);
-    setWindowFlags(Qt::WindowStaysOnTopHint);
+    ui->statusShow->installEventFilter(this);
+// 设置圆角
+    QBitmap bmp(this->size());
+
+        bmp.fill();
+
+        QPainter p(&bmp);
+
+        p.setPen(Qt::NoPen);
+
+        p.setBrush(Qt::black);
+
+        p.drawRoundedRect(bmp.rect(),20,20);
+
+        setMask(bmp);
+    ui->nameShow->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    ui->statusShow->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     //conf.par=&Ui::mainWindow;
     if (!conf.read()) {
         QMessageBox::critical(this, "错误", "(-1) 配置文件无法打开，请检查配置文件是否存在");
@@ -25,6 +43,7 @@ mainWindow::mainWindow(QWidget *parent)
     }
     ui->nameShow->setHtml(startHtml+QString::number(conf.num)+";" + QString::number(conf.groupNum) +endHtml);
     setWindowTitle("Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__);
+    ui->infoShow->setText("Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__);
    // QGraphicsBlurEffect *eff1 = new QGraphicsBlurEffect;
     //eff1->setBlurRadius(10);
     //ui->frame->setGraphicsEffect(eff1);
@@ -47,7 +66,7 @@ void mainWindow::on_random_clicked()
 {
     ui->random->setDisabled(true);
     ui->randomByGroup->setDisabled(true);
-    ui->kill->setText("");
+    ui->statusShow->setText("");
     // started random
     int times = QRandomGenerator64::global()->bounded(7,20);
     int sleepMS = QRandomGenerator64::global()->bounded(50,70);
@@ -66,7 +85,7 @@ void mainWindow::on_random_clicked()
     if (st.getName().indexOf("陈鸿") != -1 && QRandomGenerator64::global()->bounded(0, 5) >= 3) { // 40%
         ui->nameShow->setHtml(startHtml +  "(" + st.getId() +
                               ") <span style=\"color: rgb(0, 255, 0);\"><b>东鸟民</b></span>" + endHtml);
-        ui->kill->setText("#1(");
+        ui->statusShow->setText("#1(");
     }
     if (nextMQCP == true) {
         nextMQCP = false;
@@ -82,18 +101,18 @@ void mainWindow::on_random_clicked()
     if (!lastMQ && last.getId()==5&& QRandomGenerator64::global()->bounded(0, 10) > 0) {
         ui->nameShow->setHtml(returnHtml(conf.students[3]));
         st=conf.students[3];
-        //ui->kill->setText("#4&#5");
+        //ui->statusShow->setText("#4&#5");
         lastMQ=true;
     }
     else if (!lastMQ && last.getId()==4&& QRandomGenerator64::global()->bounded(0, 10) > 0) {
         ui->nameShow->setHtml(returnHtml(conf.students[4]));
         st=conf.students[4];
-        //ui->kill->setText("#4&#5");
+        //ui->statusShow->setText("#4&#5");
         lastMQ=true;
     }
     else lastMQ=false;
     if (st==last) {
-        ui->kill->setText("Double Kill! (0.04%)");
+        ui->statusShow->setText("Double statusShow! (0.04%)");
     }
     last=st;
     ui->random->setDisabled(false);
@@ -132,7 +151,7 @@ void mainWindow::on_randomByGroup_clicked()
     ui->random->setDisabled(true);
     ui->randomByGroup->setDisabled(true);
     // TODO: do randoming
-    ui->kill->setText("");
+    ui->statusShow->setText("");
     // started random
     int times = QRandomGenerator64::global()->bounded(7,20);
     int sleepMS = QRandomGenerator64::global()->bounded(50,70);
@@ -147,7 +166,7 @@ void mainWindow::on_randomByGroup_clicked()
 
 bool mainWindow::eventFilter(QObject *watched, QEvent *event)
 {
-    if(watched == ui->kill)
+    if(watched == ui->statusShow)
     {
 
         //判断事件
@@ -167,3 +186,35 @@ bool mainWindow::eventFilter(QObject *watched, QEvent *event)
         return QWidget::eventFilter(watched, event);
     }
 }
+
+void mainWindow::mousePressEvent(QMouseEvent *event)
+{
+    //当鼠标左键点击时.
+    if (event->button() == Qt::LeftButton)
+    {
+        m_move = true;
+        //记录鼠标的世界坐标.
+        m_startPoint = event->globalPos();
+        //记录窗体的世界坐标.
+        m_windowPoint = this->pos();
+    }
+}
+void mainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton)
+    {
+        //移动中的鼠标位置相对于初始位置的相对位置.
+        QPoint relativePos = event->globalPos() - m_startPoint;
+        //然后移动窗体即可.
+        this->move(m_windowPoint + relativePos );
+    }
+}
+void mainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        //改变移动状态.
+        m_move = false;
+    }
+}
+

@@ -30,7 +30,10 @@
     <normaloff>:/icon/icon.ico</normaloff>:/icon/icon.ico</iconset>
   </property>
   <property name="windowOpacity">
-   <double>0.750000000000000</double>
+   <double>0.900000000000000</double>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <widget class="QFrame" name="frame">
    <property name="geometry">
@@ -42,9 +45,9 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">#frame {
-background: rgba(255, 255, 255, 0.3);
-}</string>
+    <string notr="true">#frame {background: rgba(255, 255, 255, 0.15);}
+
+#frame * {border-radius:5px;}</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -67,6 +70,9 @@ background: rgba(255, 255, 255, 0.3);
       <pointsize>18</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 125);</string>
+    </property>
     <property name="text">
      <string>退出</string>
     </property>
@@ -86,11 +92,14 @@ background: rgba(255, 255, 255, 0.3);
       <pointsize>18</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 125);</string>
+    </property>
     <property name="text">
      <string>抽取</string>
     </property>
    </widget>
-   <widget class="QLabel" name="kill">
+   <widget class="QLabel" name="statusShow">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -106,7 +115,7 @@ background: rgba(255, 255, 255, 0.3);
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(16, 16, 16, 0.9);
+     <string notr="true">background-color: rgba(16, 16, 16, 0.4);
 color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
@@ -127,7 +136,8 @@ color: rgb(255, 255, 255);</string>
     </property>
     <property name="styleSheet">
      <string notr="true">#nameShow {
-background-color: rgba(255, 255, 255, 0.8);
+background-color: rgba(255, 255, 255, 0.4);
+border: none;
 }</string>
     </property>
     <property name="readOnly">
@@ -156,8 +166,34 @@ p, li { white-space: pre-wrap; }
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 125);</string>
+    </property>
     <property name="text">
      <string>按组抽取</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="infoShow">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>270</y>
+      <width>391</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgba(255, 255, 255, 255);
+background: rgba(255,255,255,0);</string>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
     </property>
    </widget>
   </widget>
