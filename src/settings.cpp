@@ -53,5 +53,11 @@ bool settings::read() {
     }
     if (this->groupNum == 1 && groups[0].getLeaderName() == "") return false;
     qDebug() << "Group Total: " << this->num;
+
+    // read CP
+    QStringList cpList = returnListByLine("cp.ini");
+    if (groupList.at(0) == "null") {
+        return false;
+    }
     return true;
 }

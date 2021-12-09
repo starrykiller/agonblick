@@ -19,6 +19,7 @@ public:
     void Sleep(int msec);
     ~mainWindow();
     QString returnHtml(student st);
+    QString returnHtml(student st, int r, int g, int b);
     QString returnHtmlByGroup(group gp);
 
 private slots:
@@ -34,5 +35,8 @@ private:
     Ui::mainWindow *ui;
     settings conf;
     student last;
+    bool lastMQ = false;
+    bool eventFilter(QObject *watched, QEvent *event);
+    bool nextMQCP = false;
 };
 #endif // MAINWINDOW_H
