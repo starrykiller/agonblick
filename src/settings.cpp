@@ -148,6 +148,6 @@ bool settings::read() {
         qDebug() << _cp.cpId <<" " << _cp.cpName << " " << _cp.cp1.getName() << " " << _cp.cp2.getName();
     }
     if (this->groupNum == 1 && groups[0].getLeaderName() == "") return false;
-    qDebug() << "cp Total: " << this->num;
+    qDebug() << "cp Total: " << this->cpNum;
     return true;
 }

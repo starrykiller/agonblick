@@ -44,7 +44,8 @@ mainWindow::mainWindow(QWidget *parent)
         QMessageBox::critical(this, "致命错误", conf.ParseError);
         exit(-1);
     }
-    ui->nameShow->setHtml(startHtml+QString::number(conf.num)+";" + QString::number(conf.groupNum) +endHtml);
+    ui->nameShow->setHtml(startHtml+QString::number(conf.num)+";" + QString::number(conf.groupNum) + ";" +
+                          QString::number(conf.cpNum) + endHtml);
     setWindowTitle("Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__);
     ui->infoShow->setText("Agonblick [v" + __VER__ + "] 编译于" + __DATE__ + " " + __TIME__);
    // QGraphicsBlurEffect *eff1 = new QGraphicsBlurEffect;
@@ -92,18 +93,30 @@ void mainWindow::on_random_clicked()
     }
 
     if (QRandomGenerator64::global()->bounded(0, 1000) <= 15) {
-        // 1.5%
+        // 1.5%：抽到CP
         ui->nameShow->setHtml(returnHtmlByCP(conf.cps[QRandomGenerator64::global()->bounded(0, int(conf.cpNum))]));
         st=student();
     }
-    else {
-
+    else if (QRandomGenerator64::global()->bounded(0, 1000) <= 200 && cnt > 0) {
+        // 20%：CP两人互相抽中
+        for (int i = 0; i < conf.cpNum; i ++) {
+            if (his[cnt-1]==conf.cps[i].cp1) {
+                st=conf.cps[i].cp2;
+                break;
+            }
+            else if (his[cnt-1]==conf.cps[i].cp2) {
+                st=conf.cps[i].cp1;
+                break;
+            }
+        }
     }
 
     if (st==last && last.getId() >= 1) {
         ui->statusShow->setText("Double Kill!");
     }
+    his.append(st);
     last=st;
+    cnt++;
     ui->random->setDisabled(false);
     ui->randomByGroup->setDisabled(false);
 }

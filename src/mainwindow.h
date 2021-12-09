@@ -55,6 +55,7 @@ private:
     QPoint m_startPoint;
     QString returnHtmlByCP(cp CP);
     QPoint m_windowPoint;
-
+    QVector<student> his;
+    int cnt = 0;
 };
 #endif // MAINWINDOW_H
