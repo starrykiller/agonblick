@@ -79,7 +79,7 @@ void mainWindow::on_random_clicked()
         do
             id = (QRandomGenerator64::global()->bounded(0,1919810) % 114514 +
                   QTime::currentTime().msec() % 114514) % conf.num;
-        while (!(id >= 0 && id < conf.num));
+        while (!(id >= 0 && id < int(conf.num)));
         st = conf.students[id];
         ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
         Sleep(sleepMS);
@@ -90,47 +90,17 @@ void mainWindow::on_random_clicked()
                               ") <span style=\"color: rgb(0, 255, 0);\" font-family=如风似月行楷;><b>东鸟民</b></span>" + endHtml);
         ui->statusShow->setText("#1(");
     }
-    // 2%几率
-    if (QRandomGenerator64::global()->bounded(0,100)<=1) {
-            nextMQCP = false;
-            ui->nameShow->setHtml(returnHtml(student("莫仇", 0), 255, 0, 153));
-        }
 
-    else if (!lastMQ && last.getId()==5&& QRandomGenerator64::global()->bounded(0, 10) > 3) {
-        ui->nameShow->setHtml(returnHtml(conf.students[3]));
-        st=conf.students[3];
-        //ui->statusShow->setText("#4&#5");
-        lastMQ=true;
+    if (QRandomGenerator64::global()->bounded(0, 1000) <= 15) {
+        // 1.5%
+        ui->nameShow->setHtml(returnHtmlByCP(conf.cps[QRandomGenerator64::global()->bounded(0, int(conf.cpNum))]));
+        st=student();
     }
-    else if (!lastMQ && last.getId()==4&& QRandomGenerator64::global()->bounded(0, 10) > 3) {
-        ui->nameShow->setHtml(returnHtml(conf.students[4]));
-        st=conf.students[4];
-        //ui->statusShow->setText("#4&#5");
-        lastMQ=true;
+    else {
+
     }
-    else lastMQ=false;
 
-
-    if (!lastGC && last.getId()==20&& QRandomGenerator64::global()->bounded(0, 10) > 2) {
-        ui->nameShow->setHtml(returnHtml(conf.students[22-1]));
-        st=conf.students[22-1];
-        //ui->statusShow->setText("#4&#5");
-        lastGC=true;
-    }
-    else if (!lastGC && last.getId()==22&& QRandomGenerator64::global()->bounded(0, 10) > 2) {
-        ui->nameShow->setHtml(returnHtml(conf.students[20-1]));
-        st=conf.students[20-1];
-        //ui->statusShow->setText("#4&#5");
-        lastGC=true;
-    }
-    else lastGC=false;
-
-    if (QRandomGenerator64::global()->bounded(0,100)<=1) {
-            nextMQCP = false;
-            ui->nameShow->setHtml(returnHtml(student("莫仇", 0), 255, 0, 153));
-        }
-
-    if (st==last) {
+    if (st==last && last.getId() >= 1) {
         ui->statusShow->setText("Double Kill!");
     }
     last=st;
@@ -163,6 +133,11 @@ QString mainWindow::returnHtml(student st, int r, int g, int b) {
 QString mainWindow::returnHtmlByGroup(group gp) {
     QString Id = QString::number(gp.getId());
     return startHtml + "[" + Id + "] <span style=\"color: rgb(0, 204, 0); font-family: 如风似月行楷;\"><b>" + gp.getLeaderName() + "</b>组</span>" + endHtml;
+}
+
+QString mainWindow::returnHtmlByCP(cp CP) {
+    QString Id = QString::number(CP.cpId);
+    return startHtml + "[" + Id + "] <span style=\"color: rgb(102, 0, 204); font-family: 如风似月行楷;\"><b>" + CP.cpName + "</b></span>" + endHtml;
 }
 
 void mainWindow::on_randomByGroup_clicked()

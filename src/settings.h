@@ -16,8 +16,10 @@ public:
     bool read();
     QVector <student> students;
     QVector <group> groups;
+    QVector <cp> cps;
     unsigned int num = 0;
     unsigned int groupNum = 0;
+    unsigned int cpNum = 0;
     QWidget* par;
     QStringList returnListByLine(QString configFileName);
     QString ParseError = "";

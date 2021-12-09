@@ -6,8 +6,9 @@ class cp
 {
 public:
     cp();
-    cp(int id, student _1, student _2);
+    cp(int id, QString, student _1, student _2);
     int cpId = -1;
+    QString cpName;
     student cp1;
     student cp2;
 };

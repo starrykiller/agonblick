@@ -75,12 +75,33 @@ QStringList settings::returnListByLine(QString configFileName) {
             }
             return list;
         }
+        else if (type == "cps") {
+            QStringList list;
+            QJsonValue arrayValue = jsonObject.value(QStringLiteral("cps"));
+            if(arrayValue.isArray())
+            {
+                        QJsonArray array = arrayValue.toArray();
+                        for(int i=0;i<array.size();i++)
+                        {
+                            QJsonObject groupArray = array.at(i).toObject();
+                            QString cp = groupArray["cpName"].toString() + ","  +
+                                    QString::number(groupArray["cp1"].toInt()) + "," +
+                                    QString::number(groupArray["cp2"].toInt());
+                            list.append(cp);
+                        }
+            }
+            return list;
+        }
+        else {
+            ParseError="[" + configFileName + "]JSON解析错误：不合规的类型[" + type + "]";
+            return QString("null").split("\n");
+        }
 
     }  catch (std::exception &e) {
         ParseError=e.what();
         return QString("null").split("\n");
     }
-
+    return QString("null").split("\n");
 }
 
 bool settings::read() {
@@ -114,10 +135,19 @@ bool settings::read() {
     qDebug() << "Group Total: " << this->num;
 
     // read CP
-    /*
-    QStringList cpList = returnListByLine("cp.ini");
+
+    QStringList cpList = returnListByLine("cps.json");
     if (groupList.at(0) == "null") {
         return false;
-    }*/
+    }
+    for (const auto& i : cpList) {
+        this->cpNum++;
+        QStringList cpSL = i.split(",");
+        cp _cp = cp(0-cpNum, cpSL.at(0), this->students[cpSL.at(1).toInt() - 1], this->students[cpSL.at(2).toInt() - 1]);
+        cps.append(_cp);
+        qDebug() << _cp.cpId <<" " << _cp.cpName << " " << _cp.cp1.getName() << " " << _cp.cp2.getName();
+    }
+    if (this->groupNum == 1 && groups[0].getLeaderName() == "") return false;
+    qDebug() << "cp Total: " << this->num;
     return true;
 }

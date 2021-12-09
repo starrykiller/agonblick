@@ -53,6 +53,8 @@ private:
     bool nextMQCP = false;
     bool m_move = false;
     QPoint m_startPoint;
+    QString returnHtmlByCP(cp CP);
     QPoint m_windowPoint;
+
 };
 #endif // MAINWINDOW_H
