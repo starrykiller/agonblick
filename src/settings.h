@@ -20,6 +20,7 @@ public:
     unsigned int groupNum = 0;
     QWidget* par;
     QStringList returnListByLine(QString configFileName);
+    QString ParseError = "";
 };
 
 #endif // SETTINGS_H

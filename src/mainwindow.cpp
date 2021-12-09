@@ -12,7 +12,7 @@
 #include <QPainter>
 #include <QDebug>
 
-const QString __VER__ = "2.0.0";
+const QString __VER__ = "3.0.0";
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
@@ -41,7 +41,7 @@ mainWindow::mainWindow(QWidget *parent)
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     //conf.par=&Ui::mainWindow;
     if (!conf.read()) {
-        QMessageBox::critical(this, "错误", "(-1) 配置文件无法打开，请检查配置文件是否存在");
+        QMessageBox::critical(this, "致命错误", conf.ParseError);
         exit(-1);
     }
     ui->nameShow->setHtml(startHtml+QString::number(conf.num)+";" + QString::number(conf.groupNum) +endHtml);
@@ -265,3 +265,15 @@ void mainWindow::on_stayOnTop_clicked()
     this->show();
 }
 
+void mainWindow::on_stayOnTop_stateChanged(int arg1)
+{
+    qDebug() << ui->stayOnTop->checkState() << " " << arg1;
+    this->hide();
+    if (ui->stayOnTop->checkState() == true) {
+        setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    }
+    else {
+        setWindowFlags(Qt::FramelessWindowHint);
+    }
+    this->show();
+}

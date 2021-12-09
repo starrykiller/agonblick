@@ -33,6 +33,8 @@ private slots:
 
     void on_stayOnTop_clicked();
 
+    void on_stayOnTop_stateChanged(int arg1);
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
