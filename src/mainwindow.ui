@@ -187,12 +187,13 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="font">
      <font>
-      <family>微软雅黑 Light</family>
+      <family>如风似月行楷</family>
       <pointsize>11</pointsize>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgba(255, 255, 255, 255);
+     <string notr="true">color: rgba(255, 0, 0, 255);
+font-family: 如风似月行楷;
 background: rgba(255,255,255,0);</string>
     </property>
     <property name="text">

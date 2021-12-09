@@ -40,7 +40,7 @@ protected:
 
 
 private:
-    const QString startHtml = "<span style='font-family: \"comic sans MS\", 方正小标宋简体, 华文中宋, 微软雅黑; font-weight: 300; font-size: 38pt;'>";
+    const QString startHtml = "<span style='font-family: 如风似月行楷, \"comic sans MS\", 方正小标宋简体, 华文中宋, 微软雅黑; font-weight: 250; font-size: 40pt;'>";
     const QString endHtml = "</span>";
     Ui::mainWindow *ui;
     settings conf;

@@ -88,24 +88,19 @@ void mainWindow::on_random_clicked()
                               ") <span style=\"color: rgb(0, 255, 0);\" font-family=如风似月行楷;><b>东鸟民</b></span>" + endHtml);
         ui->statusShow->setText("#1(");
     }
-    if (nextMQCP == true) {
-        nextMQCP = false;
-        ui->nameShow->setHtml(returnHtml(student("莫仇", 0), 255, 0, 153));
-    }
-    else {
-        // 3%几率
-        if (QRandomGenerator64::global()->bounded(0,100)<=3) {
+    // 2%几率
+    if (QRandomGenerator64::global()->bounded(0,100)<=1) {
             nextMQCP = false;
             ui->nameShow->setHtml(returnHtml(student("莫仇", 0), 255, 0, 153));
         }
-    }
-    if (!lastMQ && last.getId()==5&& QRandomGenerator64::global()->bounded(0, 10) > 0) {
+
+    else if (!lastMQ && last.getId()==5&& QRandomGenerator64::global()->bounded(0, 10) > 3) {
         ui->nameShow->setHtml(returnHtml(conf.students[3]));
         st=conf.students[3];
         //ui->statusShow->setText("#4&#5");
         lastMQ=true;
     }
-    else if (!lastMQ && last.getId()==4&& QRandomGenerator64::global()->bounded(0, 10) > 0) {
+    else if (!lastMQ && last.getId()==4&& QRandomGenerator64::global()->bounded(0, 10) > 3) {
         ui->nameShow->setHtml(returnHtml(conf.students[4]));
         st=conf.students[4];
         //ui->statusShow->setText("#4&#5");
@@ -144,7 +139,7 @@ QString mainWindow::returnHtml(student st, int r, int g, int b) {
 
 QString mainWindow::returnHtmlByGroup(group gp) {
     QString Id = QString::number(gp.getId());
-    return startHtml + "[" + Id + "] <span style=\"color: rgb(0, 204, 255); font-family: 如风似月行楷;\"><b>" + gp.getLeaderName() + "</b>组</span>" + endHtml;
+    return startHtml + "[" + Id + "] <span style=\"color: rgb(0, 204, 0); font-family: 如风似月行楷;\"><b>" + gp.getLeaderName() + "</b>组</span>" + endHtml;
 }
 
 void mainWindow::on_randomByGroup_clicked()
