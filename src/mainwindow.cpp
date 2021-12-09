@@ -10,6 +10,7 @@
 #include <QMouseEvent>
 #include <QBitmap>
 #include <QPainter>
+#include <QDebug>
 
 const QString __VER__ = "2.0.0";
 
@@ -43,7 +44,7 @@ mainWindow::mainWindow(QWidget *parent)
     }
     ui->nameShow->setHtml(startHtml+QString::number(conf.num)+";" + QString::number(conf.groupNum) +endHtml);
     setWindowTitle("Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__);
-    ui->infoShow->setText("Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__);
+    ui->infoShow->setText("Agonblick [v" + __VER__ + "] 编译于" + __DATE__ + " " + __TIME__);
    // QGraphicsBlurEffect *eff1 = new QGraphicsBlurEffect;
     //eff1->setBlurRadius(10);
     //ui->frame->setGraphicsEffect(eff1);
@@ -78,13 +79,13 @@ void mainWindow::on_random_clicked()
                   QTime::currentTime().msec() % 114514) % conf.num;
         while (!(id >= 0 && id < conf.num));
         st = conf.students[id];
-        ui->nameShow->setHtml(returnHtml(st));
+        ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
         Sleep(sleepMS);
     }
 
     if (st.getName().indexOf("陈鸿") != -1 && QRandomGenerator64::global()->bounded(0, 5) >= 3) { // 40%
         ui->nameShow->setHtml(startHtml +  "(" + st.getId() +
-                              ") <span style=\"color: rgb(0, 255, 0);\"><b>东鸟民</b></span>" + endHtml);
+                              ") <span style=\"color: rgb(0, 255, 0);\" font-family=如风似月行楷;><b>东鸟民</b></span>" + endHtml);
         ui->statusShow->setText("#1(");
     }
     if (nextMQCP == true) {
@@ -112,7 +113,7 @@ void mainWindow::on_random_clicked()
     }
     else lastMQ=false;
     if (st==last) {
-        ui->statusShow->setText("Double statusShow! (0.04%)");
+        ui->statusShow->setText("Double Kill!");
     }
     last=st;
     ui->random->setDisabled(false);
@@ -138,12 +139,12 @@ QString mainWindow::returnHtml(student st, int r, int g, int b) {
     if (st.getId() < 10) Id = "0" + QString::number(st.getId());
     else Id = QString::number(st.getId());
     return startHtml + "[" + Id + "]:<span style=\"color: rgb("  + QString::number(r) +
-            ", " + QString::number(g) + "," + QString::number(b) + ");\"><b>" + st.getName() + "</b></span>" + endHtml;
+            ", " + QString::number(g) + "," + QString::number(b) + "); font-family: 如风似月行楷;\"><b>" + st.getName() + "</b></span>" + endHtml;
 }
 
 QString mainWindow::returnHtmlByGroup(group gp) {
     QString Id = QString::number(gp.getId());
-    return startHtml + "[" + Id + "] <span style=\"color: rgb(255, 125, 0);\"><b>" + gp.getLeaderName() + "</b>组</span>" + endHtml;
+    return startHtml + "[" + Id + "] <span style=\"color: rgb(0, 204, 255); font-family: 如风似月行楷;\"><b>" + gp.getLeaderName() + "</b>组</span>" + endHtml;
 }
 
 void mainWindow::on_randomByGroup_clicked()
@@ -216,5 +217,33 @@ void mainWindow::mouseReleaseEvent(QMouseEvent *event)
         //改变移动状态.
         m_move = false;
     }
+}
+
+
+void mainWindow::on_checkBox_stateChanged(int arg1)
+{
+    qDebug() << ui->stayOnTop->checkState() << " " << arg1;
+    this->hide();
+    if (ui->stayOnTop->checkState() == true) {
+        setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    }
+    else {
+        setWindowFlags(Qt::FramelessWindowHint);
+    }
+    this->show();
+}
+
+
+void mainWindow::on_stayOnTop_clicked()
+{
+    qDebug() << ui->stayOnTop->checkState();
+    this->hide();
+    if (ui->stayOnTop->checkState() == true) {
+        setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    }
+    else {
+        setWindowFlags(Qt::FramelessWindowHint);
+    }
+    this->show();
 }
 

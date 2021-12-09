@@ -29,6 +29,10 @@ private slots:
 
     void on_randomByGroup_clicked();
 
+    void on_checkBox_stateChanged(int arg1);
+
+    void on_stayOnTop_clicked();
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -36,7 +40,7 @@ protected:
 
 
 private:
-    const QString startHtml = "<span style='font-family: consolas, 方正小标宋简体, 华文中宋, 微软雅黑; font-weight: 300; font-size: 40pt;'>";
+    const QString startHtml = "<span style='font-family: \"comic sans MS\", 方正小标宋简体, 华文中宋, 微软雅黑; font-weight: 300; font-size: 38pt;'>";
     const QString endHtml = "</span>";
     Ui::mainWindow *ui;
     settings conf;

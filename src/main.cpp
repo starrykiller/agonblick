@@ -4,11 +4,13 @@
 #include <QRandomGenerator>
 #include <QPalette>
 #include <QPixmap>
+#include <QFontDatabase>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     a.setWindowIcon(QIcon(":/icon/icon.ico"));
+    QFontDatabase::addApplicationFont(":/font/FZSJ-RUFSYXK.TTF");
     mainWindow w;
     int bg = QRandomGenerator::global()->bounded(1,3);
     QPixmap pixmap;

@@ -4,5 +4,6 @@
         <file>bg/1.png</file>
         <file>bg/2.png</file>
         <file>bg/3.png</file>
+        <file>font/FZSJ-RUFSYXK.TTF</file>
     </qresource>
 </RCC>
