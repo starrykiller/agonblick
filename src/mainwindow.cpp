@@ -9,7 +9,7 @@
 #include <QGraphicsBlurEffect>
 #include <QMouseEvent>
 
-const QString __VER__ = "1.6.0";
+const QString __VER__ = "1.6.1";
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
@@ -153,7 +153,8 @@ bool mainWindow::eventFilter(QObject *watched, QEvent *event)
         //判断事件
         if(event->type() == QEvent::MouseButtonPress)
         {
-            this->nextMQCP = true;
+            // this->nextMQCP = true;
+            // cancel for 1.6.1
             return true; //该事件已处理
         }
         else

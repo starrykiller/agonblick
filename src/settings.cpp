@@ -6,6 +6,9 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QMessageBox>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonValue>
 
 settings::settings()
 {
