@@ -26,10 +26,12 @@ mainWindow::mainWindow(QWidget *parent)
         bmp.fill();
 
         QPainter p(&bmp);
+        p.setRenderHint(QPainter::Antialiasing);
 
         p.setPen(Qt::NoPen);
 
         p.setBrush(Qt::black);
+
 
         p.drawRoundedRect(bmp.rect(),20,20);
 
@@ -107,6 +109,27 @@ void mainWindow::on_random_clicked()
         lastMQ=true;
     }
     else lastMQ=false;
+
+
+    if (!lastGC && last.getId()==20&& QRandomGenerator64::global()->bounded(0, 10) > 2) {
+        ui->nameShow->setHtml(returnHtml(conf.students[22-1]));
+        st=conf.students[22-1];
+        //ui->statusShow->setText("#4&#5");
+        lastGC=true;
+    }
+    else if (!lastGC && last.getId()==22&& QRandomGenerator64::global()->bounded(0, 10) > 2) {
+        ui->nameShow->setHtml(returnHtml(conf.students[20-1]));
+        st=conf.students[20-1];
+        //ui->statusShow->setText("#4&#5");
+        lastGC=true;
+    }
+    else lastGC=false;
+
+    if (QRandomGenerator64::global()->bounded(0,100)<=1) {
+            nextMQCP = false;
+            ui->nameShow->setHtml(returnHtml(student("莫仇", 0), 255, 0, 153));
+        }
+
     if (st==last) {
         ui->statusShow->setText("Double Kill!");
     }

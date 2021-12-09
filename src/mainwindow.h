@@ -46,6 +46,7 @@ private:
     settings conf;
     student last;
     bool lastMQ = false;
+    bool lastGC = false;
     bool eventFilter(QObject *watched, QEvent *event);
     bool nextMQCP = false;
     bool m_move = false;
