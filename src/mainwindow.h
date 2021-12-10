@@ -1,21 +1,22 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QWidget>
+#include "group.h"
 #include "settings.h"
 #include "student.h"
-#include "group.h"
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class mainWindow; }
+namespace Ui {
+class mainWindow;
+}
 QT_END_NAMESPACE
 
-class mainWindow : public QWidget
-{
+class mainWindow : public QWidget {
     Q_OBJECT
 
 public:
-    mainWindow(QWidget *parent = nullptr);
+    mainWindow(QWidget* parent = nullptr);
     void Sleep(int msec);
     ~mainWindow();
     QString returnHtml(student st);
@@ -28,28 +29,28 @@ private slots:
     void on_random_clicked();
 
     void on_randomByGroup_clicked();
-
-    void on_checkBox_stateChanged(int arg1);
-
-    void on_stayOnTop_clicked();
-
     void on_stayOnTop_stateChanged(int arg1);
 
-protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    void on_random_pressed();
 
+    void on_randomByGroup_pressed();
+
+    void on_exit_pressed();
+
+protected:
+    void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
 
 private:
     const QString startHtml = "<span style='font-family: 如风似月行楷, \"comic sans MS\", 方正小标宋简体, 华文中宋, 微软雅黑; font-weight: 250; font-size: 40pt;'>";
     const QString endHtml = "</span>";
-    Ui::mainWindow *ui;
+    Ui::mainWindow* ui;
     settings conf;
     student last;
     bool lastMQ = false;
     bool lastGC = false;
-    bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject* watched, QEvent* event);
     bool nextMQCP = false;
     bool m_move = false;
     QPoint m_startPoint;

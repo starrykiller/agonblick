@@ -2,8 +2,7 @@
 #define CP_H
 #include "student.h"
 
-class cp
-{
+class cp {
 public:
     cp();
     cp(int id, QString, student _1, student _2);

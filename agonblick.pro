@@ -40,3 +40,6 @@ QMAKE_TARGET_PRODUCT = Agonblick
 QMAKE_TARGET_COMPANY = "starry studio"
 QMAKE_TARGET_DESCRIPTION = "A program to choose a student randomly."
 QMAKE_TARGET_COPYRIGHT = "starry killer"
+
+DISTFILES += \
+    .code-format

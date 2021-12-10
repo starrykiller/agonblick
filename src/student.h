@@ -13,13 +13,15 @@ public:
     int getId();
     void setName(QString name);
     void setId(int Id);
-    bool operator ==(student a) {
-        if (a.getName() == this->getName() && a.getId() == this->getId()) return true;
+    bool operator==(student a)
+    {
+        if (a.getName() == this->getName() && a.getId() == this->getId())
+            return true;
         return false;
     }
 
 private:
-    QString name="untitled";
+    QString name = "untitled";
     int Id = 0;
 };
 
