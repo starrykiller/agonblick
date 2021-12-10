@@ -12,15 +12,17 @@ int main(int argc, char* argv[])
     a.setWindowIcon(QIcon(":/icon/icon.ico"));
     QFontDatabase::addApplicationFont(":/font/FZSJ-RUFSYXK.TTF");
     mainWindow w;
-    int bg = QRandomGenerator::global()->bounded(1, 3);
+    int bg = QRandomGenerator::global()->bounded(0, 8);
     QPixmap pixmap;
-    if (bg == 1)
+    if (bg <= 2)
         pixmap = QPixmap(":/bg/1.png").scaled(w.size());
 
-    else if (bg == 2)
+    else if (bg <= 3)
         pixmap = QPixmap(":/bg/2.png").scaled(w.size());
-    else
+    else if (bg <= 5)
         pixmap = QPixmap(":/bg/3.png").scaled(w.size());
+    else
+        pixmap = QPixmap(":/bg/4.png").scaled(w.size());
 
     QPalette palette(w.palette());
 

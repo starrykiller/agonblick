@@ -13,7 +13,7 @@
 #include <QString>
 #include <QTime>
 
-const QString __VER__ = "3.1.0";
+const QString __VER__ = "3.2.1";
 
 mainWindow::mainWindow(QWidget* parent)
     : QWidget(parent)
@@ -21,6 +21,7 @@ mainWindow::mainWindow(QWidget* parent)
 {
     ui->setupUi(this);
     ui->statusShow->installEventFilter(this);
+
     // 设置圆角
     QBitmap bmp(this->size());
 
@@ -64,8 +65,6 @@ void mainWindow::on_exit_clicked()
 
 void mainWindow::on_random_clicked()
 {
-    if (m_move)
-        return;
     ui->random->setDisabled(true);
     ui->randomByGroup->setDisabled(true);
     ui->statusShow->setText("");
@@ -183,8 +182,6 @@ QString mainWindow::returnHtmlByCP(cp CP)
 
 void mainWindow::on_randomByGroup_clicked()
 {
-    if (m_move)
-        return;
     ui->random->setDisabled(true);
     ui->randomByGroup->setDisabled(true);
     // TODO: do randoming
