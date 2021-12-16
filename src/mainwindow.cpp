@@ -13,7 +13,7 @@
 #include <QString>
 #include <QTime>
 
-const QString __VER__ = "3.2.1";
+const QString __VER__ = "3.3.0";
 
 mainWindow::mainWindow(QWidget* parent)
     : QWidget(parent)
@@ -26,7 +26,9 @@ mainWindow::mainWindow(QWidget* parent)
     QBitmap bmp(this->size());
 
     bmp.fill();
-
+    int bg = QRandomGenerator::global()->bounded(0, 100) % 3 + 1;
+    ui->backgroundFrame->setStyleSheet("border-image: url(:/bg/" + QString::number(bg) + ".png);");
+    ui->statusShow->setVisible(false);
     QPainter p(&bmp);
     p.setRenderHint(QPainter::Antialiasing);
 
@@ -81,7 +83,18 @@ void mainWindow::on_random_clicked()
         ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
         Sleep(sleepMS);
     }
-
+    QDate date(QDate::currentDate());
+    int year = date.year();
+    int month = date.month();
+    int day = date.day();
+    if (year == 2021 && month == 12 && day == 17) {
+        if (st.getName().indexOf("陈可") != -1 || st.getName().indexOf("商") != -1) {
+            int id;
+            id = QRandomGenerator64::global()->bounded(7, int(conf.num));
+            st = conf.students[id];
+            ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
+        }
+    }
     if (st.getName().indexOf("陈鸿") != -1 && QRandomGenerator64::global()->bounded(0, 5) >= 3) { // 40%
         ui->nameShow->setHtml(startHtml + "(" + st.getId() + ") <span style=\"color: rgb(0, 255, 0);\" "
                                                              "font-family=如风似月行楷;><b>东鸟民</b></span>"
@@ -89,9 +102,9 @@ void mainWindow::on_random_clicked()
         ui->statusShow->setText("#1(");
     }
 
-    if (QRandomGenerator64::global()->bounded(0, 1000) <= int(150 > conf.cpNum * 3 ? conf.cpNum * 30 : 150)) {
+    if (QRandomGenerator64::global()->bounded(0, 1000) <= int(150 > conf.cpNum * 50 ? conf.cpNum * 50 : 150)) {
         // 设有n对cp，
-        // 则概率为3n% (当3n<15),
+        // 则概率为5n% (当3n<15),
         // 15% (3n>=15)
         int randomedCP = QRandomGenerator64::global()->bounded(0, int(conf.cpNum));
         ui->nameShow->setHtml(returnHtmlByCP(conf.cps[randomedCP]));
@@ -316,4 +329,29 @@ void mainWindow::on_exit_pressed()
     // m_startPoint = event->pos();
     //记录窗体的世界坐标.
     m_windowPoint = this->frameGeometry().topLeft();
+}
+
+void mainWindow::paintEvent(QPaintEvent* event)
+{ /*
+     int bg = QRandomGenerator::global()->bounded(0, 100) % 4 + 1;
+     /*QPixmap pixmap;
+     if (bg <= 2)
+         pixmap = QPixmap(":/bg/1.png").scaled(w.size());
+
+     else if (bg <= 3)
+         pixmap = QPixmap(":/bg/2.png").scaled(w.size());
+     else if (bg <= 5)
+         pixmap = QPixmap(":/bg/3.png").scaled(w.size());
+     else
+         pixmap = QPixmap(":/bg/4.png").scaled(w.size());
+
+     QPalette palette(w.palette());
+
+     palette.setBrush(w.backgroundRole(), QBrush(pixmap));
+
+     w.setPalette(palette);
+    // w.setStyleSheet("#mainWindow {\n border-image: url(:/bg/" + QString::number(bg) + ".png);\n}");
+    QPainter painter(this);
+    painter.drawPixmap(rect(), QPixmap(":/bg/" + QString::number(bg) + ".png"));
+    */
 }

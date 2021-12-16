@@ -22,6 +22,7 @@ public:
     QString returnHtml(student st);
     QString returnHtml(student st, int r, int g, int b);
     QString returnHtmlByGroup(group gp);
+    void paintEvent(QPaintEvent* event);
 
 private slots:
     void on_exit_clicked();
