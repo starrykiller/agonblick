@@ -7,8 +7,8 @@ A useful software to help teachers use the computer in the classroom better.
 
 ## Feature
 
-- [ ] 点名
-- [x] 悬浮窗支持
+- [x] 点名
+- [] 悬浮窗支持
 
 ## Status
 
@@ -16,7 +16,7 @@ Working
 
 ## Update history
 
-### `4.0.0` Useful Update(实用更新)
+### **(Working)** `4.0.0` Useful Update(实用更新)
 
 重构代码，增强OOP；（窗体的模块化）
 
