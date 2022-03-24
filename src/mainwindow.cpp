@@ -13,7 +13,7 @@
 #include <QString>
 #include <QTime>
 
-const QString __VER__ = "3.3.0";
+const QString __VER__ = "3.5.0";
 
 mainWindow::mainWindow(QWidget* parent)
     : QWidget(parent)
@@ -26,19 +26,16 @@ mainWindow::mainWindow(QWidget* parent)
     QBitmap bmp(this->size());
 
     bmp.fill();
-    int bg = QRandomGenerator::global()->bounded(0, 100) % 3 + 1;
+    int bg = QRandomGenerator::global()->bounded(0, 100) % 4 + 1;
     ui->backgroundFrame->setStyleSheet("border-image: url(:/bg/" + QString::number(bg) + ".png);");
     ui->statusShow->setVisible(false);
     QPainter p(&bmp);
-    p.setRenderHint(QPainter::Antialiasing);
-
     p.setPen(Qt::NoPen);
-
     p.setBrush(Qt::black);
-
-    p.drawRoundedRect(bmp.rect(), 20, 20);
-
+    //p.drawRoundedRect(bmp.rect(), 25, 25);
+    p.setRenderHint(QPainter::Antialiasing);
     setMask(bmp);
+    this->setStyleSheet("QWidget{border-radius:25px;}");
     ui->nameShow->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     ui->statusShow->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
@@ -96,7 +93,7 @@ void mainWindow::on_random_clicked()
         }
     }
     if (st.getName().indexOf("陈鸿") != -1 && QRandomGenerator64::global()->bounded(0, 5) >= 3) { // 40%
-        ui->nameShow->setHtml(startHtml + "(" + st.getId() + ") <span style=\"color: rgb(0, 255, 0);\" "
+        ui->nameShow->setHtml(startHtml + "(" + QString::number(st.getId()) + ") <span style=\"color: rgb(0, 255, 0);\" "
                                                              "font-family=如风似月行楷;><b>东鸟民</b></span>"
             + endHtml);
         ui->statusShow->setText("#1(");

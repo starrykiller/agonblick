@@ -30,7 +30,7 @@
     <normaloff>:/icon/icon.ico</normaloff>:/icon/icon.ico</iconset>
   </property>
   <property name="windowOpacity">
-   <double>0.900000000000000</double>
+   <double>0.950000000000000</double>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -46,16 +46,17 @@
    </property>
    <property name="styleSheet">
     <string notr="true">#frame {background: rgba(255, 255, 255, 0.1);}
-#frame * {border-radius:10px;
+#frame * {border-radius:15px;
 	font-family: &quot;Microsoft YaHei UI&quot;;
 }
 #frame QPushButton {
-border: 1px solid #000;
-background-color: rgba(255, 255, 255, 105);
-font: 14pt &quot;Microsoft YaHei UI Light&quot;;
+border: 1px solid #CCC;
+background-color: rgba(255, 255, 255, 195);
+font: 14pt &quot;Microsoft YaHei UI&quot;;
+border-radius:7.5px;
 }
 #frame QPushButton:hover {
-background-color: rgba(255, 255, 255, 180);
+background-color: rgba(255, 255, 255, 150);
 }
 
 #frame #statusShow {
@@ -76,14 +77,15 @@ color:#FFF;
    <widget class="QPushButton" name="exit">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>170</y>
+      <x>280</x>
+      <y>180</y>
       <width>100</width>
-      <height>50</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>14</pointsize>
       <italic>false</italic>
       <bold>false</bold>
@@ -99,14 +101,15 @@ color:#FFF;
    <widget class="QPushButton" name="random">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>170</y>
+      <x>20</x>
+      <y>180</y>
       <width>100</width>
-      <height>50</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>14</pointsize>
       <italic>false</italic>
       <bold>false</bold>
@@ -130,7 +133,7 @@ color:#FFF;
     </property>
     <property name="styleSheet">
      <string notr="true">#nameShow {
-background-color: rgba(255, 255, 255, 0.3);
+background-color: rgba(255, 255, 255, 0.4);
 border: none;
 }</string>
     </property>
@@ -151,14 +154,15 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="randomByGroup">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>170</y>
+      <x>150</x>
+      <y>180</y>
       <width>100</width>
-      <height>50</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>14</pointsize>
       <italic>false</italic>
       <bold>false</bold>
@@ -182,6 +186,7 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="font">
      <font>
+      <family>如风似月行楷</family>
       <pointsize>11</pointsize>
      </font>
     </property>
@@ -205,7 +210,9 @@ font-family: 如风似月行楷;
      </rect>
     </property>
     <property name="font">
-     <font/>
+     <font>
+      <family>Microsoft YaHei UI</family>
+     </font>
     </property>
     <property name="text">
      <string>置于顶层</string>
@@ -221,7 +228,7 @@ font-family: 如风似月行楷;
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>140</y>
+      <y>110</y>
       <width>231</width>
       <height>51</height>
      </rect>
