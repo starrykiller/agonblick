@@ -11,6 +11,8 @@ CONFIG += c++11
 SOURCES += \
     src/cp.cpp \
     src/group.cpp \
+    src/ui/logwindow.cpp \
+    src/ui/starrywindow.cpp \
     src\\main.cpp \
     src\\mainwindow.cpp \
     src\\settings.cpp \
@@ -19,11 +21,14 @@ SOURCES += \
 HEADERS += \
     src/cp.h \
     src/group.h \
+    src/ui/logwindow.h \
+    src/ui/starrywindow.h \
     src\\mainwindow.h \
     src\\settings.h \
     src\\student.h
 
 FORMS += \
+    src/ui/logwindow.ui \
     src\\mainwindow.ui
 
 # Default rules for deployment.

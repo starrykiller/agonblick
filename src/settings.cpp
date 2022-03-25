@@ -123,7 +123,7 @@ bool settings::read()
     }
     if (this->groupNum == 1 && groups[0].getLeaderName() == "")
         return false;
-    qDebug() << "Group Total: " << this->num;
+    qDebug() << "Group Total: " << this->groupNum;
 
     // read CP
 

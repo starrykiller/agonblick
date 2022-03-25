@@ -5,6 +5,8 @@
 #include "settings.h"
 #include "student.h"
 #include <QWidget>
+#include "ui/starrywindow.h"
+#include "ui/logwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -12,7 +14,7 @@ class mainWindow;
 }
 QT_END_NAMESPACE
 
-class mainWindow : public QWidget {
+class mainWindow : public starryWindow {
     Q_OBJECT
 
 public:
@@ -22,42 +24,33 @@ public:
     QString returnHtml(student st);
     QString returnHtml(student st, int r, int g, int b);
     QString returnHtmlByGroup(group gp);
-    void paintEvent(QPaintEvent* event);
+    logWindow logw;
+    static void LogMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+    static void MessageSender(QString);
+
 
 private slots:
     void on_exit_clicked();
-
     void on_random_clicked();
-
     void on_randomByGroup_clicked();
     void on_stayOnTop_stateChanged(int arg1);
-
     void on_random_pressed();
-
     void on_randomByGroup_pressed();
-
     void on_exit_pressed();
 
-protected:
-    void mousePressEvent(QMouseEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
+    void on_showLog_stateChanged(int arg1);
 
 private:
+    starryWindow win;
     const QString startHtml = "<span style='font-family: 如风似月行楷, \"comic sans MS\", 方正小标宋简体, 华文中宋, 微软雅黑; font-weight: 250; font-size: 40pt;'>";
     const QString endHtml = "</span>";
     Ui::mainWindow* ui;
     settings conf;
     student last;
-    bool lastMQ = false;
-    bool lastGC = false;
     bool eventFilter(QObject* watched, QEvent* event);
-    bool nextMQCP = false;
-    bool m_move = false;
-    QPoint m_startPoint;
     QString returnHtmlByCP(cp CP);
-    QPoint m_windowPoint;
     QVector<student> his;
+    static mainWindow* window;
     int cnt = 0;
 };
 #endif // MAINWINDOW_H

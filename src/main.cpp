@@ -5,6 +5,7 @@
 #include <QPalette>
 #include <QPixmap>
 #include <QRandomGenerator>
+#include <QMutex>
 
 int main(int argc, char* argv[])
 {
@@ -12,8 +13,8 @@ int main(int argc, char* argv[])
     a.setWindowIcon(QIcon(":/icon/icon.ico"));
     QFontDatabase::addApplicationFont(":/font/FZSJ-RUFSYXK.TTF");
     mainWindow w;
-    int bg = QRandomGenerator::global()->bounded(0, 100) % 4 + 1;
 
     w.show();
     return a.exec();
 }
+

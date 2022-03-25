@@ -12,44 +12,48 @@
 #include <QRandomGenerator64>
 #include <QString>
 #include <QTime>
+#include <QMutex>
+#include "ui/starrywindow.h"
 
-const QString __VER__ = "3.5.0";
+const QString __VER__ = "4.0.0-alpha1";
+
+inline QString retHTML(QString s) {
+    return "<span style=\"font-family: '如风似月行楷', '微软雅黑'; font-size: 24px;\">"+s+"</span>";
+}
+
+mainWindow* mainWindow::window;
 
 mainWindow::mainWindow(QWidget* parent)
-    : QWidget(parent)
+    : starryWindow()
     , ui(new Ui::mainWindow)
 {
     ui->setupUi(this);
+    window=this;
+    qInstallMessageHandler(LogMessage);
+    updateBorderRadius();
     ui->statusShow->installEventFilter(this);
+    QVector<QString> pic;
+    for (int i = 1; i <= 4; i ++) {
+        pic.append(":/bg/" + QString::number(i) + ".png");
+    }
+    addBackground(pic);
+    logw.addBackground(pic);
+    logw.updateBorderRadius();
 
-    // 设置圆角
-    QBitmap bmp(this->size());
-
-    bmp.fill();
-    int bg = QRandomGenerator::global()->bounded(0, 100) % 4 + 1;
-    ui->backgroundFrame->setStyleSheet("border-image: url(:/bg/" + QString::number(bg) + ".png);");
-    ui->statusShow->setVisible(false);
-    QPainter p(&bmp);
-    p.setPen(Qt::NoPen);
-    p.setBrush(Qt::black);
-    //p.drawRoundedRect(bmp.rect(), 25, 25);
-    p.setRenderHint(QPainter::Antialiasing);
-    setMask(bmp);
-    this->setStyleSheet("QWidget{border-radius:25px;}");
     ui->nameShow->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     ui->statusShow->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
-    // conf.par=&Ui::mainWindow;
+
     if (!conf.read()) {
         QMessageBox::critical(this, "致命错误", conf.ParseError);
         exit(-1);
     }
-    ui->nameShow->setHtml(startHtml + QString::number(conf.num) + ";" + QString::number(conf.groupNum) + ";" + QString::number(conf.cpNum) + endHtml);
+
+    ui->nameShow->setHtml(startHtml + QString::number(conf.num) + ";" +
+                          QString::number(conf.groupNum) + ";" +
+                          QString::number(conf.cpNum) + endHtml);
     setWindowTitle("Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__);
     ui->infoShow->setText("Agonblick [v" + __VER__ + "] 编译于" + __DATE__ + " " + __TIME__);
-    // QGraphicsBlurEffect *eff1 = new QGraphicsBlurEffect;
-    // eff1->setBlurRadius(10);
-    // ui->frame->setGraphicsEffect(eff1);
 }
 
 mainWindow::~mainWindow()
@@ -59,6 +63,7 @@ mainWindow::~mainWindow()
 
 void mainWindow::on_exit_clicked()
 {
+    qDebug() << "Exiting!";
     exit(0);
 }
 
@@ -68,37 +73,28 @@ void mainWindow::on_random_clicked()
     ui->randomByGroup->setDisabled(true);
     ui->statusShow->setText("");
     // started random
-    int times = QRandomGenerator64::global()->bounded(7, 20);
-    int sleepMS = QRandomGenerator64::global()->bounded(50, 70);
+    int times = QRandomGenerator64::global()->bounded(10, 25);
+    int sleepMS = QRandomGenerator64::global()->bounded(40, 80);
     student st;
+    qDebug() << "SleepTime: " << sleepMS;
+    qDebug() << "Times: " << times;
     for (int i = 0; i < times; i++) {
         int id;
         do
-            id = (QRandomGenerator64::global()->bounded(0, 1919810) % 114514 + QTime::currentTime().msec() % 114514) % conf.num;
+            id = QRandomGenerator64::global()->bounded(0, int(conf.num));
         while (!(id >= 0 && id < int(conf.num)));
         st = conf.students[id];
         ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
+        qDebug() << "[" << conf.students[id].getId() << "] " <<
+            conf.students[id].getName();
         Sleep(sleepMS);
-    }
-    QDate date(QDate::currentDate());
-    int year = date.year();
-    int month = date.month();
-    int day = date.day();
-    if (year == 2021 && month == 12 && day == 17) {
-        if (st.getName().indexOf("陈可") != -1 || st.getName().indexOf("商") != -1) {
-            int id;
-            id = QRandomGenerator64::global()->bounded(7, int(conf.num));
-            st = conf.students[id];
-            ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
-        }
     }
     if (st.getName().indexOf("陈鸿") != -1 && QRandomGenerator64::global()->bounded(0, 5) >= 3) { // 40%
         ui->nameShow->setHtml(startHtml + "(" + QString::number(st.getId()) + ") <span style=\"color: rgb(0, 255, 0);\" "
                                                              "font-family=如风似月行楷;><b>东鸟民</b></span>"
             + endHtml);
-        ui->statusShow->setText("#1(");
+        ui->statusShow->setText(retHTML("#1("));
     }
-
     if (QRandomGenerator64::global()->bounded(0, 1000) <= int(150 > conf.cpNum * 50 ? conf.cpNum * 50 : 150)) {
         // 设有n对cp，
         // 则概率为5n% (当3n<15),
@@ -106,19 +102,25 @@ void mainWindow::on_random_clicked()
         int randomedCP = QRandomGenerator64::global()->bounded(0, int(conf.cpNum));
         ui->nameShow->setHtml(returnHtmlByCP(conf.cps[randomedCP]));
         st = student(conf.cps[randomedCP].cpName, conf.cps[randomedCP].cpId);
-    } else if (QRandomGenerator64::global()->bounded(0, 1000) <= 750 && cnt > 0) {
+        qDebug() << "[?]" << conf.cps[randomedCP].cpName;
+    }
+    else if (QRandomGenerator64::global()->bounded(0, 1000) <= 750 && cnt > 0) {
         // 75%：CP两人互相抽中
         for (unsigned int i = 0; i < conf.cpNum; i++) {
             if (his[cnt - 1] == conf.cps[i].cp1) {
+                if (cnt>1&&his[cnt-2]==conf.cps[i].cp2) break;
                 st = conf.cps[i].cp2;
+                qDebug() << "[!]" << conf.cps[i].cp1.getName() << "->" << st.getName() << "(75%)";
                 break;
             } else if (his[cnt - 1] == conf.cps[i].cp2) {
+                if (cnt>1&&his[cnt-2]==conf.cps[i].cp1) break;
                 st = conf.cps[i].cp1;
+                qDebug() << "[!]" << conf.cps[i].cp2.getName() << "->" << st.getName() << "(75%)";
                 break;
             }
         }
     }
-
+    ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
     his.append(st);
     last = st;
     cnt++;
@@ -138,9 +140,9 @@ void mainWindow::on_random_clicked()
     }
     if (randomedTimes > 1) {
         if (combo > 1)
-            ui->statusShow->setText("Total " + QString::number(randomedTimes) + "; Combo " + QString::number(combo));
+            ui->statusShow->setText(retHTML("Total " + QString::number(randomedTimes) + "; Combo " + QString::number(combo)));
         else
-            ui->statusShow->setText("Total " + QString::number(randomedTimes));
+            ui->statusShow->setText(retHTML("Total " + QString::number(randomedTimes)));
     }
 
     ui->random->setDisabled(false);
@@ -161,7 +163,8 @@ QString mainWindow::returnHtml(student st)
         Id = "0" + QString::number(st.getId());
     else
         Id = QString::number(st.getId());
-    return startHtml + "[" + Id + "]:<span style=\"color: rgb(0, 75, 255);\"><b>" + st.getName() + "</b></span>" + endHtml;
+    return startHtml + "[" + Id + "]:<span style=\"color: rgb(0, 75, 255);\"><b>" +
+           st.getName() + "</b></span>" + endHtml;
 }
 
 QString mainWindow::returnHtml(student st, int r, int g, int b)
@@ -177,7 +180,7 @@ QString mainWindow::returnHtml(student st, int r, int g, int b)
 QString mainWindow::returnHtmlByGroup(group gp)
 {
     QString Id = QString::number(gp.getId());
-    return startHtml + "[" + Id + "] <span style=\"color: rgb(0, 204, 0); font-family: "
+    return startHtml + "[" + Id + "] <span style=\"color: rgb(255, 104, 0); font-family: "
                                   "如风似月行楷;\"><b>"
         + gp.getLeaderName() + "</b>组</span>" + endHtml;
 }
@@ -197,85 +200,24 @@ void mainWindow::on_randomByGroup_clicked()
     // TODO: do randoming
     ui->statusShow->setText("");
     // started random
-    int times = QRandomGenerator64::global()->bounded(7, 20);
+    int times = QRandomGenerator64::global()->bounded(15, 30);
     int sleepMS = QRandomGenerator64::global()->bounded(50, 70);
+    qDebug() << "SleepTime: " << sleepMS;
+    qDebug() << "Times: " << times;
     for (int i = 0; i < times; i++) {
         group gp = conf.groups[QRandomGenerator64::global()->bounded(
             0, int(conf.groupNum))];
         ui->nameShow->setHtml(returnHtmlByGroup(gp));
+        qDebug() << "[" << gp.getId() << "] " << gp.getLeaderName();
         Sleep(sleepMS);
     }
     ui->random->setDisabled(false);
     ui->randomByGroup->setDisabled(false);
 }
 
-bool mainWindow::eventFilter(
-    QObject* watched,
-    QEvent*
-        event)
-{ /*
-     if(watched == ui->random || watched == ui->randomByGroup ||
-     watched == ui->exit)
-     {
-         //判断事件
-         if(event->type() == QEvent::MouseButtonPress )
-         {
-             // this->nextMQCP = true;
-             // cancel for 1.6.1
-             m_move = true;
-             //记录鼠标的世界坐标.
-             m_startPoint = QCursor::pos();
-             qDebug() << m_startPoint;
-             //m_startPoint = event->pos();
-             //记录窗体的世界坐标.
-             m_windowPoint = this->frameGeometry().topLeft();
-             return true; //该事件已处理
-         }
-         else
-         {
-             return false; //如果是其它事件，可以进行进一步的处理
-         }
-     }
-     else
-     {
-         return QWidget::eventFilter(watched, event);
-     }*/
+bool mainWindow::eventFilter(QObject* watched, QEvent* event)
+{
     return true;
-}
-
-void mainWindow::mousePressEvent(QMouseEvent* event)
-{
-    //当鼠标左键点击时.
-    if (event->button() == Qt::LeftButton) {
-        // if (event->globalPos())
-        m_move = true;
-        //记录鼠标的世界坐标.
-        m_startPoint = event->globalPos();
-        // qDebug() << m_startPoint;
-        // m_startPoint = event->pos();
-        //记录窗体的世界坐标.
-        m_windowPoint = this->frameGeometry().topLeft();
-    }
-}
-void mainWindow::mouseMoveEvent(QMouseEvent* event)
-{
-    if (event->buttons() & Qt::LeftButton) {
-        // (1130, 1132)
-        //
-        //移动中的鼠标位置相对于初始位置的相对位置.
-        QPoint relativePos = event->globalPos() - m_startPoint;
-        // QPoint relativePos = event->pos() - m_startPoint;
-        // QPoint relativePos = event->globalPos();
-        //然后移动窗体即可.
-        this->move(m_windowPoint + relativePos);
-    }
-}
-void mainWindow::mouseReleaseEvent(QMouseEvent* event)
-{
-    if (event->button() == Qt::LeftButton) {
-        //改变移动状态.
-        m_move = false;
-    }
 }
 
 void mainWindow::on_stayOnTop_stateChanged(int arg1)
@@ -283,8 +225,10 @@ void mainWindow::on_stayOnTop_stateChanged(int arg1)
     this->hide();
     if (arg1 == Qt::Unchecked) {
         setWindowFlags(Qt::FramelessWindowHint);
+        qDebug() << "Make MainWindow no longer stay on top";
     } else {
         setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+        qDebug() << "Make MainWindow stay on top";
     }
     this->show();
 }
@@ -294,11 +238,7 @@ void mainWindow::on_random_pressed()
     if (m_move)
         return;
     m_move = true;
-    //记录鼠标的世界坐标.
     m_startPoint = QCursor::pos();
-    // qDebug() << m_startPoint;
-    // m_startPoint = event->pos();
-    //记录窗体的世界坐标.
     m_windowPoint = this->frameGeometry().topLeft();
 }
 
@@ -307,11 +247,7 @@ void mainWindow::on_randomByGroup_pressed()
     if (m_move)
         return;
     m_move = true;
-    //记录鼠标的世界坐标.
     m_startPoint = QCursor::pos();
-    // qDebug() << m_startPoint;
-    // m_startPoint = event->pos();
-    //记录窗体的世界坐标.
     m_windowPoint = this->frameGeometry().topLeft();
 }
 
@@ -320,35 +256,34 @@ void mainWindow::on_exit_pressed()
     if (m_move)
         return;
     m_move = true;
-    //记录鼠标的世界坐标.
     m_startPoint = QCursor::pos();
-    // qDebug() << m_startPoint;
-    // m_startPoint = event->pos();
-    //记录窗体的世界坐标.
     m_windowPoint = this->frameGeometry().topLeft();
 }
 
-void mainWindow::paintEvent(QPaintEvent* event)
-{ /*
-     int bg = QRandomGenerator::global()->bounded(0, 100) % 4 + 1;
-     /*QPixmap pixmap;
-     if (bg <= 2)
-         pixmap = QPixmap(":/bg/1.png").scaled(w.size());
+void mainWindow::on_showLog_stateChanged(int arg1)
+{
+    if (arg1 == Qt::Checked) {
+        logw.move(this->frameGeometry().topRight()+QPoint(7,0));
+        logw.changeBackground();
+        logw.setVisible(true);
+        qDebug() << "Make Log Window Visible";
+    } else {
+        logw.setVisible(false);
+        qDebug() << "Make Log Window Invisible";
+    }
+}
 
-     else if (bg <= 3)
-         pixmap = QPixmap(":/bg/2.png").scaled(w.size());
-     else if (bg <= 5)
-         pixmap = QPixmap(":/bg/3.png").scaled(w.size());
-     else
-         pixmap = QPixmap(":/bg/4.png").scaled(w.size());
+void mainWindow::LogMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg){
+    static QMutex mutex;
+    mutex.lock();
+    QString text;
+    QString context_info = QString("File:(%1) Line:(%2)").arg(QString(context.file)).arg(context.line);
+    QString current_date_time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    QString message = QString("%1 %2").arg(current_date_time).arg(msg);
+    MessageSender(message);
+    mutex.unlock();
+}
 
-     QPalette palette(w.palette());
-
-     palette.setBrush(w.backgroundRole(), QBrush(pixmap));
-
-     w.setPalette(palette);
-    // w.setStyleSheet("#mainWindow {\n border-image: url(:/bg/" + QString::number(bg) + ".png);\n}");
-    QPainter painter(this);
-    painter.drawPixmap(rect(), QPixmap(":/bg/" + QString::number(bg) + ".png"));
-    */
+void mainWindow::MessageSender(QString msg) {
+    window->logw.log(msg);
 }
