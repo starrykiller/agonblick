@@ -1,12 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "group.h"
-#include "settings.h"
-#include "student.h"
 #include <QWidget>
-#include "ui/starrywindow.h"
-#include "ui/logwindow.h"
+
+#include "starrywindow.h"
+#include "logwindow.h"
+
+#include "../utility/group.h"
+#include "../utility/settings.h"
+#include "../utility/student.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

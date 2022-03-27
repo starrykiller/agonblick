@@ -19,12 +19,12 @@
      <x>10</x>
      <y>10</y>
      <width>480</width>
-     <height>380</height>
+     <height>350</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">#logShow {
-background: rgba(255,255,255,0.4);
+background: rgba(255,255,255,0.2);
 border-radius: 10px;
 }</string>
    </property>

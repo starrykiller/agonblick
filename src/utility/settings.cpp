@@ -41,8 +41,8 @@ QStringList settings::returnListByLine(QString configFileName)
             ParseError = "[" + configFileName + "]JSON解析错误：不合规的版本号";
             return QString("null").split("\n");
         }
-        qDebug() << "type=" << jsonObject["type"].toString();
-        qDebug() << "version=" << jsonObject["version"].toString();
+        qDebug() << "type=" + jsonObject["type"].toString();
+        qDebug() << "version=" + jsonObject["version"].toString();
         if (type == "names") {
             QStringList list;
             QJsonValue arrayValue = jsonObject.value(QStringLiteral("names"));

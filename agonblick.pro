@@ -9,27 +9,27 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/cp.cpp \
-    src/group.cpp \
+    src/utility/cp.cpp \
+    src/utility/group.cpp \
     src/ui/logwindow.cpp \
     src/ui/starrywindow.cpp \
-    src\\main.cpp \
-    src\\mainwindow.cpp \
-    src\\settings.cpp \
-    src\\student.cpp
+    src/main.cpp \
+    src/ui/mainwindow.cpp \
+    src/utility/settings.cpp \
+    src/utility/student.cpp
 
 HEADERS += \
-    src/cp.h \
-    src/group.h \
+    src/utility/cp.h \
+    src/utility/group.h \
     src/ui/logwindow.h \
     src/ui/starrywindow.h \
-    src\\mainwindow.h \
-    src\\settings.h \
-    src\\student.h
+    src/ui/mainwindow.h \
+    src/utility/settings.h \
+    src/utility/student.h
 
 FORMS += \
     src/ui/logwindow.ui \
-    src\\mainwindow.ui
+    src/ui/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "student.h"
 #include "ui_mainwindow.h"
 #include <QBitmap>
 #include <QCoreApplication>
@@ -13,9 +12,11 @@
 #include <QString>
 #include <QTime>
 #include <QMutex>
-#include "ui/starrywindow.h"
 
-const QString __VER__ = "4.0.0-alpha1";
+#include "starrywindow.h"
+#include "../utility/student.h"
+
+const QString __VER__ = "4.0.0-alpha2";
 
 inline QString retHTML(QString s) {
     return "<span style=\"font-family: '如风似月行楷', '微软雅黑'; font-size: 24px;\">"+s+"</span>";
@@ -43,17 +44,29 @@ mainWindow::mainWindow(QWidget* parent)
     ui->nameShow->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     ui->statusShow->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    logw.setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
     if (!conf.read()) {
-        QMessageBox::critical(this, "致命错误", conf.ParseError);
-        exit(-1);
-    }
+        ui->random->setDisabled(true);
+        ui->randomByGroup->setDisabled(true);
+        ui->showLog->setDisabled(true);
+        ui->nameShow->setHtml(startHtml + "配置读取错误" + endHtml);
+        qDebug() << "[Fatal] 致命错误:" << conf.ParseError;
 
-    ui->nameShow->setHtml(startHtml + QString::number(conf.num) + ";" +
-                          QString::number(conf.groupNum) + ";" +
-                          QString::number(conf.cpNum) + endHtml);
-    setWindowTitle("Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__);
-    ui->infoShow->setText("Agonblick [v" + __VER__ + "] 编译于" + __DATE__ + " " + __TIME__);
+        logw.move(this->frameGeometry().topRight()+QPoint(7,0));
+        logw.setVisible(true);
+    }
+    else {
+        ui->nameShow->setHtml(startHtml + QString::number(conf.num) + ";" +
+                              QString::number(conf.groupNum) + ";" +
+                              QString::number(conf.cpNum) + endHtml);
+        setWindowTitle("Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__);
+        ui->infoShow->setText("Agonblick [v" + __VER__ + "] 编译于" + __DATE__ + " " + __TIME__);
+qDebug()<<"Agonblick [" + __VER__ + "] " + __DATE__ + " " + __TIME__;
+        if (__VER__.indexOf("beta") != -1 || __VER__.indexOf("alpha") != -1) {
+            ui->betaShow->setText("测试版本可能不稳定");
+    }
+}
 }
 
 mainWindow::~mainWindow()
@@ -223,14 +236,19 @@ bool mainWindow::eventFilter(QObject* watched, QEvent* event)
 void mainWindow::on_stayOnTop_stateChanged(int arg1)
 {
     this->hide();
+    logw.hide();
     if (arg1 == Qt::Unchecked) {
         setWindowFlags(Qt::FramelessWindowHint);
-        qDebug() << "Make MainWindow no longer stay on top";
+        logw.setWindowFlags(Qt::WindowStaysOnTopHint);
+        qDebug() << "Make Window no longer stay on top";
     } else {
         setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
-        qDebug() << "Make MainWindow stay on top";
+        logw.setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+        qDebug() << "Make Window stay on top";
     }
     this->show();
+    if (ui->showLog->checkState() == Qt::Checked)
+        logw.show();
 }
 
 void mainWindow::on_random_pressed()

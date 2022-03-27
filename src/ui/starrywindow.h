@@ -8,6 +8,7 @@
 class starryWindow : public QWidget
 {
     Q_OBJECT
+
 public:
     starryWindow();
     starryWindow(QWidget*);
