@@ -16,7 +16,7 @@
 #include "starrywindow.h"
 #include "../utility/student.h"
 
-const QString __VER__ = "4.0.0-alpha2";
+const QString __VER__ = "4.0.0-alpha3";
 
 inline QString retHTML(QString s) {
     return "<span style=\"font-family: '如风似月行楷', '微软雅黑'; font-size: 24px;\">"+s+"</span>";
@@ -86,20 +86,17 @@ void mainWindow::on_random_clicked()
     ui->randomByGroup->setDisabled(true);
     ui->statusShow->setText("");
     // started random
-    int times = QRandomGenerator64::global()->bounded(10, 25);
-    int sleepMS = QRandomGenerator64::global()->bounded(40, 80);
+    int times = QRandomGenerator64::global()->bounded(10, 11);
+    int sleepMS = 30;
     student st;
-    qDebug() << "SleepTime: " << sleepMS;
-    qDebug() << "Times: " << times;
-    for (int i = 0; i < times; i++) {
-        int id;
-        do
-            id = QRandomGenerator64::global()->bounded(0, int(conf.num));
-        while (!(id >= 0 && id < int(conf.num)));
+    qDebug() << "SleepTime:" << sleepMS;
+    qDebug() << "Times:" << times;
+    for (int i = 0; i < times; ++i) {
+        int id = QRandomGenerator64::global()->bounded(0, int(conf.num));
         st = conf.students[id];
         ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
-        qDebug() << "[" << conf.students[id].getId() << "] " <<
-            conf.students[id].getName();
+        //qDebug() << "[" + QString::number(conf.students[id].getId()) + "]" <<
+        //    conf.students[id].getName();
         Sleep(sleepMS);
     }
     if (st.getName().indexOf("陈鸿") != -1 && QRandomGenerator64::global()->bounded(0, 5) >= 3) { // 40%
@@ -108,7 +105,7 @@ void mainWindow::on_random_clicked()
             + endHtml);
         ui->statusShow->setText(retHTML("#1("));
     }
-    if (QRandomGenerator64::global()->bounded(0, 1000) <= int(150 > conf.cpNum * 50 ? conf.cpNum * 50 : 150)) {
+    /*if (QRandomGenerator64::global()->bounded(0, 1000) <= int(150 > conf.cpNum * 50 ? conf.cpNum * 50 : 150)) {
         // 设有n对cp，
         // 则概率为5n% (当3n<15),
         // 15% (3n>=15)
@@ -132,8 +129,46 @@ void mainWindow::on_random_clicked()
                 break;
             }
         }
+    }*/
+
+    // 4.0.0 增加不重复功能
+    if (ui->repeat->checkState()==Qt::Unchecked) {
+        ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
     }
-    ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
+    else {
+        int cnt=0; bool ok=true;
+
+        while (st.count>0) {
+            ui->statusShow->setText(retHTML("重复保护生效"));
+            qDebug()<<"触发重复保护";
+            int id = QRandomGenerator64::global()->bounded(0, int(conf.num));
+            st = conf.students[id];
+            ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
+            cnt++;
+            if (cnt>2*conf.num){
+                ok=false;
+                break;
+            }
+            if (st.count==0) break;
+            Sleep(5);
+        }
+        if (ok) {
+            ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
+        }
+        else {
+            // 重置!
+            for(int i = 0;i < conf.num;++i){
+                conf.students[i].count=0;
+
+            }
+            ui->statusShow->setText(retHTML("已重置重复保护"));
+            int id = QRandomGenerator64::global()->bounded(0, int(conf.num));
+            st = conf.students[id];
+        }
+        ui->nameShow->setHtml(returnHtml(st, 255, 0, 255));
+    }
+
+    if (st.getId()>=0)conf.students[st.getId()-1].count++;
     his.append(st);
     last = st;
     cnt++;
@@ -151,7 +186,7 @@ void mainWindow::on_random_clicked()
                 flag = false;
         }
     }
-    if (randomedTimes > 1) {
+    if (randomedTimes > 1 && ui->statusShow->toHtml().indexOf("重置")==-1) {
         if (combo > 1)
             ui->statusShow->setText(retHTML("Total " + QString::number(randomedTimes) + "; Combo " + QString::number(combo)));
         else
@@ -296,7 +331,7 @@ void mainWindow::LogMessage(QtMsgType type, const QMessageLogContext &context, c
     mutex.lock();
     QString text;
     QString context_info = QString("File:(%1) Line:(%2)").arg(QString(context.file)).arg(context.line);
-    QString current_date_time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    QString current_date_time = QDateTime::currentDateTime().toString("hh:mm:ss");
     QString message = QString("%1 %2").arg(current_date_time).arg(msg);
     MessageSender(message);
     mutex.unlock();

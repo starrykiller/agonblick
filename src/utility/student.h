@@ -13,6 +13,7 @@ public:
     int getId();
     void setName(QString name);
     void setId(int Id);
+    int count=0;
     bool operator==(student a)
     {
         if (a.getName() == this->getName() && a.getId() == this->getId())

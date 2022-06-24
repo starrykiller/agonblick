@@ -10,6 +10,7 @@ public:
     int getId();
     void setLeaderName(QString name);
     void setId(int Id);
+    int count=0;
     bool operator==(group a)
     {
         if (a.getLeaderName() == this->getLeaderName() && a.getId() == this->getId())
